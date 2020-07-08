@@ -7,7 +7,7 @@ Amundsen's announcement feature requires that developers create a custom impleme
 Implement the `announcement_client` to make a request to system storing announcements.
 
 ### Shared Logic
-[`announcement_client`](https://github.com/lyft/amundsenfrontendlibrary/tree/master/amundsen_application/base/base_announcement_client.py) implements `_get_posts()` of `base_announcement_client` with the minimal logic for this use case.
+[`announcement_client`](https://github.com/kylg/amundsenfrontendlibrary/tree/master/amundsen_application/base/base_announcement_client.py) implements `_get_posts()` of `base_announcement_client` with the minimal logic for this use case.
 
 It collects the posts from `get_posts()` method.
 
@@ -39,7 +39,7 @@ This method will contain whatever custom logic is needed to collect announcement
 
 Announcements could be collected from database (as in exemplary SQLAlchemyAnnouncementClient), kafka persistent topic, web rss feed, etc.
 
-See the following [`example_announcement_client`](https://github.com/lyft/amundsenfrontendlibrary/tree/master/amundsen_application/base/examples/example_announcement_client.py) for an example implementation of `base_announcement_client` and `get_posts()`. This example assumes a temporary sqlite database with no security, authentication, persistence or authorization configured.
+See the following [`example_announcement_client`](https://github.com/kylg/amundsenfrontendlibrary/tree/master/amundsen_application/base/examples/example_announcement_client.py) for an example implementation of `base_announcement_client` and `get_posts()`. This example assumes a temporary sqlite database with no security, authentication, persistence or authorization configured.
 
 ## Usage
 

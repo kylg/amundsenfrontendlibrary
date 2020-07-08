@@ -1,6 +1,6 @@
 # Flask configuration
 
-After modifying any variable in [config.py](https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/config.py) described in this document, be sure to rebuild your application with these changes.
+After modifying any variable in [config.py](https://github.com/kylg/amundsenfrontendlibrary/blob/master/amundsen_application/config.py) described in this document, be sure to rebuild your application with these changes.
 
 **NOTE: This document is a work in progress and does not include 100% of features. We welcome PRs to complete this document**
 
@@ -33,14 +33,14 @@ By default, Amundsen does not do any authorization on showing preview. By regist
 ```bash
     ACL_ENABLED_DASHBOARD_PREVIEW = {'ModePreview'}
 ```
-Amundsen ingests Mode dashboards only from the shared space, which all registered Mode users are able to view. Therefore our authorization first validates if the current user is registered in Mode. This feature is dependent on Amundsen also ingesting Mode user information via the [ModeDashboardUserExtractor](https://github.com/lyft/amundsendatabuilder/blob/master/README.md#modedashboarduserextractor) and the metadata service version must be at least [v2.5.2](https://github.com/lyft/amundsenmetadatalibrary/releases/tag/v2.5.2).
+Amundsen ingests Mode dashboards only from the shared space, which all registered Mode users are able to view. Therefore our authorization first validates if the current user is registered in Mode. This feature is dependent on Amundsen also ingesting Mode user information via the [ModeDashboardUserExtractor](https://github.com/kylg/amundsendatabuilder/blob/master/README.md#modedashboarduserextractor) and the metadata service version must be at least [v2.5.2](https://github.com/kylg/amundsenmetadatalibrary/releases/tag/v2.5.2).
 
 ### How to support preview of different product?
-You can add preview support for different products by adding its preview class to [DefaultPreviewMethodFactory](https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/api/preview/dashboard/dashboard_preview/preview_factory_method.py#L27)
-In order to develop new preview class, you need to implement the class that inherits [BasePreview](https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/base/base_preview.py#L4) class and [ModePreview](https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/api/preview/dashboard/dashboard_preview/mode_preview.py#L28) would be a great example.
+You can add preview support for different products by adding its preview class to [DefaultPreviewMethodFactory](https://github.com/kylg/amundsenfrontendlibrary/blob/master/amundsen_application/api/preview/dashboard/dashboard_preview/preview_factory_method.py#L27)
+In order to develop new preview class, you need to implement the class that inherits [BasePreview](https://github.com/kylg/amundsenfrontendlibrary/blob/master/amundsen_application/base/base_preview.py#L4) class and [ModePreview](https://github.com/kylg/amundsenfrontendlibrary/blob/master/amundsen_application/api/preview/dashboard/dashboard_preview/mode_preview.py#L28) would be a great example.
 
 ## Mail Client Features
-Amundsen has two features that leverage the custom mail client -- the feedback tool and notifications. For these features a custom implementation of [base_mail_client](https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/base/base_mail_client.py) must be mapped to the `MAIL_CLIENT` configuration variable.
+Amundsen has two features that leverage the custom mail client -- the feedback tool and notifications. For these features a custom implementation of [base_mail_client](https://github.com/kylg/amundsenfrontendlibrary/blob/master/amundsen_application/base/base_mail_client.py) must be mapped to the `MAIL_CLIENT` configuration variable.
 
 To fully enable these features in the UI, the application configuration variables for these features must also be set to true. Please see this [entry](application_config.md#mail-client-features) in our application configuration doc for further information.
 

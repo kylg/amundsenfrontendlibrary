@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lyft/amundsenfrontendlibrary"
+    "url": "https://github.com/kylg/amundsenfrontendlibrary"
   },
   "scripts": {
     "build": "cross-env TS_NODE_PROJECT='tsconfig.webpack.json' webpack --progress --config webpack.prod.ts",

@@ -14,7 +14,7 @@ from amundsen_application.log.action_log import action_logging
 class NotificationType(str, Enum):
     """
     Enum to describe supported notification types. Must match NotificationType interface defined in:
-    https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/static/js/interfaces/Notifications.ts
+    https://github.com/kylg/amundsenfrontendlibrary/blob/master/amundsen_application/static/js/interfaces/Notifications.ts
     """
     OWNER_ADDED = 'owner_added'
     OWNER_REMOVED = 'owner_removed'

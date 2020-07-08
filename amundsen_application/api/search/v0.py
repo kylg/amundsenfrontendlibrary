@@ -61,7 +61,7 @@ def _search_table(*, search_term: str, page_index: int, filters: Dict, search_ty
     """
     Call the search service endpoint and return matching results
     Search service logic defined here:
-    https://github.com/lyft/amundsensearchlibrary/blob/master/search_service/api/table.py
+    https://github.com/kylg/amundsensearchlibrary/blob/master/search_service/api/table.py
 
     :return: a json output containing search results array as 'results'
     """
@@ -136,7 +136,7 @@ def _search_user(*, search_term: str, page_index: int, search_type: str) -> Dict
     """
     Call the search service endpoint and return matching results
     Search service logic defined here:
-    https://github.com/lyft/amundsensearchlibrary/blob/master/search_service/api/user.py
+    https://github.com/kylg/amundsensearchlibrary/blob/master/search_service/api/user.py
 
     :return: a json output containing search results array as 'results'
     """
@@ -217,7 +217,7 @@ def _search_dashboard(*, search_term: str, page_index: int, filters: Dict, searc
     """
     Call the search service endpoint and return matching results
     Search service logic defined here:
-    https://github.com/lyft/amundsensearchlibrary/blob/master/search_service/api/dashboard.py
+    https://github.com/kylg/amundsensearchlibrary/blob/master/search_service/api/dashboard.py
 
     :return: a json output containing search results array as 'results'
     """

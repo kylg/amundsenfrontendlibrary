@@ -1,4 +1,4 @@
-IMAGE := amundsendev/amundsen-frontend
+IMAGE := kylg/amundsen-frontend
 OIDC_IMAGE := ${IMAGE}-oidc
 VERSION:= $(shell grep -m 1 '__version__' setup.py | cut -d '=' -f 2 | tr -d "'" | tr -d '[:space:]')
 

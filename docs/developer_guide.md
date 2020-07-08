@@ -2,7 +2,7 @@
 
 ## Environment
 
-Follow the installation instructions in the section [Install standalone application directly from the source](https://github.com/lyft/amundsenfrontendlibrary/blob/master/docs/installation.md#install-standalone-application-directly-from-the-source).
+Follow the installation instructions in the section [Install standalone application directly from the source](https://github.com/kylg/amundsenfrontendlibrary/blob/master/docs/installation.md#install-standalone-application-directly-from-the-source).
 
 Install the javascript development requirements:
 
@@ -48,7 +48,7 @@ Fix all errors before submitting a PR.
 
 `npm run test` runs our Frontend unit tests. Please add unit tests to cover new code additions and fix any test failures before submitting a PR. You can also have a dedicated terminal running `npm run test:watch` while developing, which would continuously run tests over your modified files.
 
-To run specific tests, run `npm run test-nocov -t <regex>`, where `<regex>` is any pattern that matches the names of the test blocks that you want to run. See our [recommendations for writing unit tests](https://github.com/lyft/amundsenfrontendlibrary/blob/master/docs/recommended_practices.md).
+To run specific tests, run `npm run test-nocov -t <regex>`, where `<regex>` is any pattern that matches the names of the test blocks that you want to run. See our [recommendations for writing unit tests](https://github.com/kylg/amundsenfrontendlibrary/blob/master/docs/recommended_practices.md).
 
 ### Frontend Type Checking
 
@@ -81,7 +81,7 @@ We strive to keep our application accessible. For that, we use the 'airbnb-types
 We also try to model our application's markup on best practices regarding semantic markup. If you are making large markup changes on one of your PRs, make sure your changes comply with this [HTML semantics checklist][semanticchecklist].
 
 [eslint]: https://eslint.org/
-[eslintconfig]: https://github.com/lyft/amundsenfrontendlibrary/blob/master/amundsen_application/static/package.json#L242
+[eslintconfig]: https://github.com/kylg/amundsenfrontendlibrary/blob/master/amundsen_application/static/package.json#L242
 [stylelint]: https://stylelint.io/
 [prettier]: https://prettier.io/
 [husky]: https://github.com/typicode/husky

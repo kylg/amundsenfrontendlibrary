@@ -41,7 +41,7 @@ setup(
     name='amundsen-frontend',
     version=__version__,
     description='Web UI for Amundsen',
-    url='https://www.github.com/lyft/amundsenfrontendlibrary',
+    url='https://www.github.com/kylg/amundsenfrontendlibrary',
     maintainer='Lyft',
     maintainer_email='dev@lyft.com',
     packages=find_packages(exclude=['tests*']),

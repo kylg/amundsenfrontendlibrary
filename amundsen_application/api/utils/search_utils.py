@@ -39,8 +39,8 @@ def transform_filters(*, filters: Dict = {}, resource: str) -> Dict:
     """
     Transforms the data shape of filters from the application to the data
     shape required by the search service according to the api defined at:
-    https://github.com/lyft/amundsensearchlibrary/blob/master/search_service/api/swagger_doc/table/search_table_filter.yml
-    https://github.com/lyft/amundsensearchlibrary/blob/master/search_service/api/swagger_doc/dashboard/search_dashboard_filter.yml
+    https://github.com/kylg/amundsensearchlibrary/blob/master/search_service/api/swagger_doc/table/search_table_filter.yml
+    https://github.com/kylg/amundsensearchlibrary/blob/master/search_service/api/swagger_doc/dashboard/search_dashboard_filter.yml
     """
     filter_payload = {}
     for category in valid_search_fields.get(resource, {}):
@@ -61,8 +61,8 @@ def generate_query_json(*, filters: Dict = {}, page_index: int, search_term: str
     """
     Transforms the given paramaters to the query json for the search service according to
     the api defined at:
-    https://github.com/lyft/amundsensearchlibrary/blob/master/search_service/api/swagger_doc/table/search_table_filter.yml
-    https://github.com/lyft/amundsensearchlibrary/blob/master/search_service/api/swagger_doc/dashboard/search_dashboard_filter.yml
+    https://github.com/kylg/amundsensearchlibrary/blob/master/search_service/api/swagger_doc/table/search_table_filter.yml
+    https://github.com/kylg/amundsensearchlibrary/blob/master/search_service/api/swagger_doc/dashboard/search_dashboard_filter.yml
     """
     return {
         'page_index': int(page_index),

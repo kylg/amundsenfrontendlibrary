@@ -50,7 +50,7 @@ def popular_tables() -> Response:
     :return: a json output containing an array of popular table metadata as 'popular_tables'
 
     Schema Defined Here:
-    https://github.com/lyft/amundsenmetadatalibrary/blob/master/metadata_service/api/popular_tables.py
+    https://github.com/kylg/amundsenmetadatalibrary/blob/master/metadata_service/api/popular_tables.py
     """
     try:
         url = app.config['METADATASERVICE_BASE'] + POPULAR_TABLES_ENDPOINT
@@ -82,7 +82,7 @@ def get_table_metadata() -> Response:
     call the metadata service endpoint and return matching results
     :return: a json output containing a table metdata object as 'tableData'
 
-    Schema Defined Here: https://github.com/lyft/amundsenmetadatalibrary/blob/master/metadata_service/api/table.py
+    Schema Defined Here: https://github.com/kylg/amundsenmetadatalibrary/blob/master/metadata_service/api/table.py
     TODO: Define type for this
 
     TODO: Define an interface for envoy_client
@@ -185,7 +185,7 @@ def get_last_indexed() -> Response:
     call the metadata service endpoint to get the last indexed timestamp of neo4j
     :return: a json output containing the last indexed timestamp, in unix epoch time, as 'timestamp'
 
-    Schema Defined Here: https://github.com/lyft/amundsenmetadatalibrary/blob/master/metadata_service/api/system.py
+    Schema Defined Here: https://github.com/kylg/amundsenmetadatalibrary/blob/master/metadata_service/api/system.py
     """
     try:
         url = app.config['METADATASERVICE_BASE'] + LAST_INDEXED_ENDPOINT
@@ -335,7 +335,7 @@ def get_tags() -> Response:
     call the metadata service endpoint to get the list of all tags from neo4j
     :return: a json output containing the list of all tags, as 'tags'
 
-    Schema Defined Here: https://github.com/lyft/amundsenmetadatalibrary/blob/master/metadata_service/api/tag.py
+    Schema Defined Here: https://github.com/kylg/amundsenmetadatalibrary/blob/master/metadata_service/api/tag.py
     """
     try:
         url = app.config['METADATASERVICE_BASE'] + TAGS_ENDPOINT

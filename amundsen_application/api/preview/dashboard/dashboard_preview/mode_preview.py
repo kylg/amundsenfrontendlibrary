@@ -98,7 +98,7 @@ class ModePreview(BasePreview):
         """
         Get Mode user ID via metadata service. Note that metadata service needs to be at least v2.5.2 and
         Databuilder should also have ingested Mode user.
-        https://github.com/lyft/amundsendatabuilder#modedashboarduserextractor
+        https://github.com/kylg/amundsendatabuilder#modedashboarduserextractor
 
         :param user_id:
         :return:
