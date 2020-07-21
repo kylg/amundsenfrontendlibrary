@@ -163,6 +163,7 @@ const globalState: GlobalState = {
       is_view: false,
       key: '',
       last_updated_timestamp: 0,
+      tblLocation: '',
       schema: '',
       name: '',
       description: '',

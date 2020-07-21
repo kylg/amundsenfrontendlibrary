@@ -92,6 +92,7 @@ export interface TableMetadata {
   source: TableSource;
   watermarks: Watermark[];
   programmatic_descriptions: ProgrammaticDescription[];
+  tblLocation: string;
 }
 
 export interface UpdateOwnerPayload {

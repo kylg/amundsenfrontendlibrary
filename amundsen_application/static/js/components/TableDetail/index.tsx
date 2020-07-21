@@ -256,6 +256,14 @@ export class TableDetail extends React.Component<
                       </time>
                     </section>
                   )}
+                  {!!data.tblLocation && (
+                    <section className="metadata-section">
+                      <div className="section-title title-3">
+                        Table Location:
+                      </div>
+                      <div className="max-width-text">{data.tblLocation}</div>
+                    </section>
+                  )}
                   <section className="metadata-section">
                     <div className="section-title title-3">Frequent Users</div>
                     <FrequentUsers readers={data.table_readers} />

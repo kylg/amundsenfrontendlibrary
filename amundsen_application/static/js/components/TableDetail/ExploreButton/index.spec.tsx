@@ -34,6 +34,7 @@ describe('ExploreButton', () => {
         schema: 'schema',
         name: 'table_name',
         last_updated_timestamp: 12321312321,
+        tblLocation: '',
         description: '',
         table_writer: {
           application_url: '',
