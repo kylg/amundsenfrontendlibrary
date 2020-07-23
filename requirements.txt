@@ -76,6 +76,21 @@ amundsen-common>=0.3.5,<1.0
 # Upstream url: https://github.com/flask-restful/flask-restful
 flask-restful==0.3.7
 
+# Python wrapper module around the OpenSSL library
+pyopenssl==19.1.0
+
+# A comprehensive WSGI web application library.
+# Upstream url: https://github.com/pallets/werkzeug
+werkzeug>=1,<2
+
+# An extension for Flask that adds support for Server-side Session to your application.
+# Upstream url: https://github.com/fengsp/flask-session
+flask-session~=0.3.2
+
+# Microsoft Authentication Library (MSAL)
+# Upstream url: https://github.com/AzureAD/microsoft-authentication-library-for-python
+msal>=0.6.1,<2
+
 # SDK for JIRA
 jira==2.0.0
 

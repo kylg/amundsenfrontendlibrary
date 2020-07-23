@@ -2,7 +2,7 @@ import logging
 from typing import Optional, Any
 
 import requests
-from flask import has_app_context, current_app as app
+from flask import request, has_app_context, current_app as app
 from requests.auth import HTTPBasicAuth
 from retrying import retry
 
@@ -106,7 +106,7 @@ class ModePreview(BasePreview):
         """
 
         metadata_svc_url = '{0}{1}/{2}'.format(app.config['METADATASERVICE_BASE'], USER_ENDPOINT, user_id)
-        response = request_metadata(url=metadata_svc_url)
+        response = request_metadata(url=metadata_svc_url, method=request.method)
         response.raise_for_status()
 
         user = load_user(response.json())

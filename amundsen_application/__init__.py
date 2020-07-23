@@ -17,6 +17,7 @@ from amundsen_application.api.preview.v0 import preview_blueprint
 from amundsen_application.api.search.v0 import search_blueprint
 from amundsen_application.api.preview.dashboard.v0 import dashboard_preview_blueprint
 from amundsen_application.api.issue.issue import IssueAPI, IssuesAPI
+from flaskoidc_azure import build_auth_url
 
 
 app_wrapper_class = Flask
@@ -45,6 +46,13 @@ def create_app(config_module_class: str, template_folder: str = None) -> Flask:
         os.getenv('FRONTEND_SVC_CONFIG_MODULE_CLASS') or config_module_class
 
     app.config.from_object(config_module_class)
+
+    # This section is needed for url_for("foo", _external=True) to automatically
+    # generate http scheme when this sample is running on localhost,
+    # and to generate https scheme when it is deployed behind reversed proxy.
+    # See also https://flask.palletsprojects.com/en/1.0.x/deploying/wsgi-standalone/#proxy-setups
+    from werkzeug.middleware.proxy_fix import ProxyFix
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
     if app.config.get('LOG_CONFIG_FILE'):
         logging.config.fileConfig(app.config.get('LOG_CONFIG_FILE'), disable_existing_loggers=False)
@@ -78,5 +86,7 @@ def create_app(config_module_class: str, template_folder: str = None) -> Flask:
     init_custom_routes = app.config.get('INIT_CUSTOM_ROUTES')
     if init_custom_routes:
         init_custom_routes(app)
+
+    app.jinja_env.globals.update(_build_auth_url=build_auth_url)  # Used in template
 
     return app

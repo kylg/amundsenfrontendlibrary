@@ -1,19 +1,24 @@
+from http import HTTPStatus
 from typing import Dict, Optional
-from flask import Flask
+from flask import Flask, Response, jsonify, make_response
+
 from amundsen_application.config import LocalConfig
 from amundsen_application.models.user import load_user, User
+from amundsen_application.api.metadata.v0 import USER_ENDPOINT
+from amundsen_application.api.utils.request_utils import request_metadata
+from flaskoidc_azure import get_token_from_cache, get_user
 
 
 def get_access_headers(app: Flask) -> Optional[Dict]:
     """
     Function to retrieve and format the Authorization Headers
     that can be passed to various microservices who are expecting that.
-    :param oidc: OIDC object having authorization information
+    :param app: The instance of the current app.
     :return: A formatted dictionary containing access token
     as Authorization header.
     """
     try:
-        access_token = app.oidc.get_access_token()
+        access_token = get_token_from_cache(app.config['SCOPE'])
         return {'Authorization': 'Bearer {}'.format(access_token)}
     except Exception:
         return None
@@ -28,11 +33,32 @@ def get_auth_user(app: Flask) -> User:
     :param app: The instance of the current app.
     :return: A class UserInfo (Note, there isn't a UserInfo class, so we use Any)
     """
-    from flask import g
-    user_info = load_user(g.oidc_id_token)
+    token = get_token_from_cache(app.config['SCOPE'])
+    user_info = load_user(get_user(token))
     return user_info
+
+
+def put_auth_user(app: Flask) -> Response:
+    """
+    Add or update user into metadata service.
+    :param user: user information
+    :param app: The instance of the current app.
+    :return: A class UserInfo (Note, there isn't a UserInfo class, so we use Any)
+    """
+    try:
+        user = get_auth_user(app)
+
+        url = '{0}{1}/{2}'.format(app.config['METADATASERVICE_BASE'], USER_ENDPOINT, user.user_id)
+        response = request_metadata(url=url, method='PUT', data=user.__dict__)
+        status_code = response.status_code
+
+        return make_response(jsonify({'msg': 'success', 'response': response.json()}), status_code)
+    except Exception as e:
+        message = 'Encountered exception: ' + str(e)
+        return make_response(jsonify({'msg': message}), HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 class OidcConfig(LocalConfig):
     AUTH_USER_METHOD = get_auth_user
+    PUT_USER_METHOD = put_auth_user
     REQUEST_HEADERS_METHOD = get_access_headers

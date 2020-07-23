@@ -6,6 +6,7 @@ from typing import Any, Dict, Optional
 from flask import Response, jsonify, make_response, request
 from flask import current_app as app
 from flask.blueprints import Blueprint
+from flask_restful import reqparse
 
 from amundsen_application.log.action_log import action_logging
 
@@ -467,6 +468,51 @@ def get_user() -> Response:
         logging.exception(message)
         payload = jsonify({'msg': message})
         return make_response(payload, HTTPStatus.INTERNAL_SERVER_ERROR)
+
+
+@metadata_blueprint.route('/user', methods=['PUT'])
+def update_user() -> Response:
+
+    @action_logging
+    def _log_update_user(*, user_id: str, method: str) -> None:
+        pass  # pragma: no cover
+
+    try:
+        parser = reqparse.RequestParser()
+        parser.add_argument('user_id', type=str, required=True, location='form')
+        parser.add_argument('email', type=str, required=False, location='form')
+        parser.add_argument('first_name', type=str, required=False, location='form')
+        parser.add_argument('last_name', type=str, required=False, location='form')
+        parser.add_argument('full_name', type=str, required=False, location='form')
+        parser.add_argument('display_name', type=str, required=False, location='form')
+        parser.add_argument('is_active', type=bool, required=False, location='form')
+        parser.add_argument('github_username', type=str, required=False, location='form')
+        parser.add_argument('team_name', type=str, required=False, location='form')
+        parser.add_argument('slack_id', type=str, required=False, location='form')
+        parser.add_argument('employee_type', type=str, required=False, location='form')
+        parser.add_argument('manager_fullname', type=str, required=False, location='form')
+        parser.add_argument('manager_email', type=str, required=False, location='form')
+        parser.add_argument('manager_id', type=str, required=False, location='form')
+        parser.add_argument('role_name', type=str, required=False, location='form')
+        parser.add_argument('profile_url', type=str, required=False, location='form')
+        parser.add_argument('other_key_values', type=dict, required=False, location='form')
+        user = parser.parse_args()
+
+        # args = request.get_json()
+        # resource_type = get_query_param(args, 'type')
+        # resource_key = get_query_param(args, 'key')
+
+        url = '{0}{1}/{2}'.format(app.config['METADATASERVICE_BASE'], USER_ENDPOINT, user['user_id'])
+        _log_update_user(user_id=user['user_id'], method=request.method)
+
+        response = request_metadata(url=url, method=request.method, data=(user.__dict__))
+        status_code = response.status_code
+
+        return make_response(jsonify({'msg': 'success', 'response': response.json()}), status_code)
+    except Exception as e:
+        message = 'Encountered exception: ' + str(e)
+        logging.exception(message)
+        return make_response(jsonify({'msg': message}), HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
 @metadata_blueprint.route('/user/bookmark', methods=['GET'])

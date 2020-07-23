@@ -42,14 +42,14 @@ setup(
     version=__version__,
     description='Web UI for Amundsen',
     url='https://www.github.com/kylg/amundsenfrontendlibrary',
-    maintainer='Lyft',
-    maintainer_email='dev@lyft.com',
+    maintainer='kylg',
+    maintainer_email='info@kylg.org',
     packages=find_packages(exclude=['tests*']),
     include_package_data=True,
     dependency_links=[],
     install_requires=requirements,
     extras_require={
-        'oidc': ['flaskoidc==0.0.2']
+        'oidc': ['flaskoidc-azure==0.0.5']
     },
     python_requires=">=3.6",
     entry_points="""
