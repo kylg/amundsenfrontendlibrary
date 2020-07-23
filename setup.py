@@ -49,7 +49,7 @@ setup(
     dependency_links=[],
     install_requires=requirements,
     extras_require={
-        'oidc': ['flaskoidc-azure==0.0.5']
+        'oidc': ['flaskoidc-azure==0.0.6']
     },
     python_requires=">=3.6",
     entry_points="""
