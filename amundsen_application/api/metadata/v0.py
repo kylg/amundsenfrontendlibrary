@@ -94,6 +94,7 @@ def get_table_metadata() -> Response:
         list_item_source = request.args.get('source', None)
 
         results_dict = _get_table_metadata(table_key=table_key, index=list_item_index, source=list_item_source)
+        _update_table_reads()
         return make_response(jsonify(results_dict), results_dict.get('status_code', HTTPStatus.INTERNAL_SERVER_ERROR))
     except Exception as e:
         message = 'Encountered exception: ' + str(e)
@@ -147,6 +148,37 @@ def _get_table_metadata(*, table_key: str, index: int, source: str) -> Dict[str,
         results_dict['status_code'] = getattr(e, 'code', HTTPStatus.INTERNAL_SERVER_ERROR)
         return results_dict
 
+@action_logging
+def _update_table_reads() -> Response:
+    try:
+
+        if app.config['AUTH_USER_METHOD']:
+            user = app.config['AUTH_USER_METHOD'](app)
+        else:
+            raise Exception('AUTH_USER_METHOD is not configured')
+
+        resource_type = 'table'
+        resource_key = get_query_param(request.args, 'key')
+
+        url = '{0}{1}/{2}/read/{3}/{4}'.format(app.config['METADATASERVICE_BASE'],
+                                                 USER_ENDPOINT,
+                                                 user.user_id,
+                                                 resource_type,
+                                                 resource_key)
+
+        response = request_metadata(url=url, method='PUT')
+        status_code = response.status_code
+
+        if status_code == HTTPStatus.OK:
+            message = 'Updated reads'
+        else:
+            message = 'There was a problem updating reads {0}'.format(user.user_id)
+
+        payload = jsonify({'msg': message})
+        return make_response(payload, status_code)
+    except Exception as e:
+        payload = jsonify({'msg': 'Encountered exception: ' + str(e)})
+        return make_response(payload, HTTPStatus.INTERNAL_SERVER_ERROR)
 
 @metadata_blueprint.route('/update_table_owner', methods=['PUT', 'DELETE'])
 def update_table_owner() -> Response:

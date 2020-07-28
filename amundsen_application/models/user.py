@@ -20,11 +20,13 @@ def load_user(user_data: Dict) -> User:
         # In order to call 'GET_PROFILE_URL' we make sure the user id exists
         if _str_no_value(user_data.get('email')):
             if _str_no_value(user_data.get('mail')):
-                user_data['email'] = user_data.get('userPrincipalName')
+                user_data['email'] = user_data.get('userPrincipalName').lower()
             else:
-                user_data['email'] = user_data.get('mail')
-        user_data['user_id'] = user_data.get('email').lower()
+                user_data['email'] = user_data.get('mail').lower()
+        else:
+            user_data['email'] = user_data.get('email').lower()
 
+        user_data['user_id'] = user_data.get('email')
         # Add profile_url from optional 'GET_PROFILE_URL' configuration method.
         # This methods currently exists for the case where the 'profile_url' is not included
         # in the user metadata.
