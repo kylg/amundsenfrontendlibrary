@@ -54,6 +54,7 @@ describe('ExploreButton', () => {
         ...tableDataOverrides,
       },
     };
+    // @ts-ignore
     const wrapper = shallow<ExploreButton>(<ExploreButton {...props} />);
     return { props, wrapper };
   };

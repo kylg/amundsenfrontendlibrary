@@ -171,6 +171,7 @@ const globalState: GlobalState = {
       partition: { is_partitioned: false },
       table_readers: [],
       source: { source: '', source_type: '' },
+      generator: { generator: '', generator_type: '' },
       watermarks: [],
       programmatic_descriptions: [],
     },
