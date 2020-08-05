@@ -18,13 +18,20 @@ def load_user(user_data: Dict) -> User:
     try:
         schema = UserSchema()
         # In order to call 'GET_PROFILE_URL' we make sure the user id exists
-        if _str_no_value(user_data.get('id')):
-            user_data['id'] = user_data.get('mail')
+        if _str_no_value(user_data.get('email')):
+            if _str_no_value(user_data.get('mail')):
+                user_data['email'] = user_data.get('userPrincipalName').lower()
+            else:
+                user_data['email'] = user_data.get('mail').lower()
+        else:
+            user_data['email'] = user_data.get('email').lower()
+
+        user_data['user_id'] = user_data.get('email')
         # Add profile_url from optional 'GET_PROFILE_URL' configuration method.
         # This methods currently exists for the case where the 'profile_url' is not included
         # in the user metadata.
         if _str_no_value(user_data.get('profile_url')) and app.config['GET_PROFILE_URL']:
-            user_data['profile_url'] = app.config['GET_PROFILE_URL'](user_data['id'])
+            user_data['profile_url'] = app.config['GET_PROFILE_URL'](user_data['user_id'])
         data, errors = schema.load(user_data)
         return data
     except ValidationError as err:
