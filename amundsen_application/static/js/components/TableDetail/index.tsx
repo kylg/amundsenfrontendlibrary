@@ -240,6 +240,12 @@ export class TableDetail extends React.Component<
                   />
                 </section>
               )}
+              {!!data.tblLocation && (
+                <section className="metadata-section">
+                  <div className="section-title title-3">Table Location:</div>
+                  <div>{data.tblLocation}</div>
+                </section>
+              )}
               <section className="column-layout-2">
                 <section className="left-panel">
                   {!data.is_view && (
@@ -256,14 +262,6 @@ export class TableDetail extends React.Component<
                           epochTimestamp: data.last_updated_timestamp,
                         })}
                       </time>
-                    </section>
-                  )}
-                  {!!data.tblLocation && (
-                    <section className="metadata-section">
-                      <div className="section-title title-3">
-                        Table Location:
-                      </div>
-                      <div className="max-width-text">{data.tblLocation}</div>
                     </section>
                   )}
                   <section className="metadata-section">
