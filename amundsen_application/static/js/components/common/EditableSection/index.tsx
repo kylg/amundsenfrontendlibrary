@@ -74,7 +74,7 @@ export class EditableSection extends React.Component<
   };
 
   renderReadOnlyButton = (): React.ReactNode => {
-    const { editText, editUrl } = this.props;
+    const { editText, editUrl = '' } = this.props;
     const popoverHoverFocus = (
       <Popover id="popover-trigger-hover-focus">{editText}</Popover>
     );

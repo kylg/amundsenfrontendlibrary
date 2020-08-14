@@ -18,7 +18,7 @@ class Config:
     # LOG_CONFIG_FILE = 'amundsen_application/logging.conf'
     LOG_CONFIG_FILE = None
 
-    COLUMN_STAT_ORDER = None  # type: Dict[str, int]
+    COLUMN_STAT_ORDER = {'min':3, 'max':2, 'nullCount':1, 'distinctCount':0}  # type: Dict[str, int]
 
     UNEDITABLE_SCHEMAS = set()  # type: Set[str]
 

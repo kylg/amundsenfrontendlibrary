@@ -11,6 +11,8 @@ import { OpenRequestAction } from 'ducks/notification/types';
 import { logClick } from 'ducks/utilMethods';
 import { RequestMetadataType, TableColumn } from 'interfaces';
 
+import { EDIT_PROMPT, EDIT_URL } from '../constants';
+
 import './styles.scss';
 import EditableSection from 'components/common/EditableSection';
 
@@ -26,6 +28,7 @@ interface DispatchFromProps {
 interface OwnProps {
   data: TableColumn;
   index: number;
+  readOnly?: boolean;
 }
 
 interface ColumnListItemState {
@@ -167,7 +170,12 @@ export class ColumnListItem extends React.Component<
           {this.state.isExpanded && (
             <section className="expanded-content">
               <div className="stop-propagation" onClick={this.stopPropagation}>
-                <EditableSection title="Description">
+                <EditableSection
+                  title="Description"
+                  readOnly={this.props.readOnly}
+                  editText={EDIT_PROMPT}
+                  editUrl={EDIT_URL}
+                >
                   <ColumnDescEditableText
                     columnIndex={this.props.index}
                     editable={metadata.is_editable}

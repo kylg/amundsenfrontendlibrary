@@ -6,10 +6,12 @@ import './styles.scss';
 
 interface ColumnListProps {
   columns?: TableColumn[];
+  readOnly?: boolean;
 }
 
 const ColumnList: React.SFC<ColumnListProps> = ({
   columns,
+  readOnly,
 }: ColumnListProps) => {
   if (columns.length < 1) {
     return <div />;
@@ -17,7 +19,12 @@ const ColumnList: React.SFC<ColumnListProps> = ({
   }
 
   const columnList = columns.map((entry, index) => (
-    <ColumnListItem key={`column:${index}`} data={entry} index={index} />
+    <ColumnListItem
+      key={`column:${index}`}
+      data={entry}
+      index={index}
+      readOnly={readOnly}
+    />
   ));
 
   return <ul className="column-list list-group">{columnList}</ul>;
@@ -25,6 +32,7 @@ const ColumnList: React.SFC<ColumnListProps> = ({
 
 ColumnList.defaultProps = {
   columns: [] as TableColumn[],
+  readOnly: false,
 };
 
 export default ColumnList;

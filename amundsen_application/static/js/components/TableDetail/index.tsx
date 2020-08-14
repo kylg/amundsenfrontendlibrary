@@ -49,7 +49,12 @@ import { getLoggingParams } from 'utils/logUtils';
 import RequestDescriptionText from './RequestDescriptionText';
 import RequestMetadataForm from './RequestMetadataForm';
 
-import { PROGRMMATIC_DESC_HEADER, ERROR_MESSAGE } from './constants';
+import {
+  PROGRMMATIC_DESC_HEADER,
+  ERROR_MESSAGE,
+  EDIT_PROMPT,
+  EDIT_URL,
+} from './constants';
 
 import './styles.scss';
 
@@ -137,7 +142,12 @@ export class TableDetail extends React.Component<
 
     // Default Column content
     tabInfo.push({
-      content: <ColumnList columns={this.props.tableData.columns} />,
+      content: (
+        <ColumnList
+          columns={this.props.tableData.columns}
+          readOnly={!this.props.tableData.is_editable}
+        />
+      ),
       key: 'columns',
       title: `Columns (${this.props.tableData.columns.length})`,
     });
@@ -222,7 +232,12 @@ export class TableDetail extends React.Component<
           </header>
           <div className="column-layout-1">
             <aside className="left-panel">
-              <EditableSection title="Description">
+              <EditableSection
+                title="Description"
+                readOnly={!data.is_editable}
+                editText={EDIT_PROMPT}
+                editUrl={EDIT_URL}
+              >
                 <TableDescEditableText
                   maxLength={AppConfig.editableText.tableDescLength}
                   value={data.description}
@@ -272,13 +287,23 @@ export class TableDetail extends React.Component<
                   </section>
                 </section>
                 <section className="right-panel">
-                  <EditableSection title="Tags">
+                  <EditableSection
+                    title="Tags"
+                    readOnly={!data.is_editable}
+                    editText={EDIT_PROMPT}
+                    editUrl={EDIT_URL}
+                  >
                     <TagInput
                       resourceType={ResourceType.table}
                       uriKey={this.props.tableData.key}
                     />
                   </EditableSection>
-                  <EditableSection title="Owners">
+                  <EditableSection
+                    title="Owners"
+                    readOnly={!data.is_editable}
+                    editText={EDIT_PROMPT}
+                    editUrl={EDIT_URL}
+                  >
                     <OwnerEditor />
                   </EditableSection>
                 </section>
