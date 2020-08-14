@@ -1,3 +1,4 @@
+import json
 from http import HTTPStatus
 from typing import Dict, Optional
 from flask import Flask, Response, jsonify, make_response
@@ -6,6 +7,7 @@ from amundsen_application.config import LocalConfig
 from amundsen_application.models.user import load_user, User
 from amundsen_application.api.metadata.v0 import USER_ENDPOINT
 from amundsen_application.api.utils.request_utils import request_metadata
+from amundsen_application.api.v0 import current_user
 from flaskoidc_azure import get_token_from_cache, get_user
 
 
@@ -58,7 +60,19 @@ def put_auth_user(app: Flask) -> Response:
         return make_response(jsonify({'msg': message}), HTTPStatus.INTERNAL_SERVER_ERROR)
 
 
+def get_logged_in_user(app: Flask) -> User:
+    """
+    Retrieves the user information from metadata service.
+    :param app: The instance of the current app.
+    :return: A class UserInfo (Note, there isn't a UserInfo class, so we use Any)
+    """
+    user = json.loads(current_user().data).get("user")
+    user_info = load_user(user)
+    return user_info
+
+
 class OidcConfig(LocalConfig):
     AUTH_USER_METHOD = get_auth_user
     PUT_USER_METHOD = put_auth_user
     REQUEST_HEADERS_METHOD = get_access_headers
+    LOGGED_IN_USER_METHOD = get_logged_in_user

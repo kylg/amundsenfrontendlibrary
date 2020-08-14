@@ -46,7 +46,7 @@ def marshall_table_full(table_dict: Dict) -> Dict:
 
     # add role control, only admin can edit table
     if app.config['AUTH_USER_METHOD']:
-        user = app.config['AUTH_USER_METHOD'](app)
+        user = app.config['LOGGED_IN_USER_METHOD'](app)
         is_editable = is_editable and user.role_name == 'admin'
 
     results['is_editable'] = is_editable
