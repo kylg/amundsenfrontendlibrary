@@ -42,13 +42,13 @@ def marshall_table_full(table_dict: Dict) -> Dict:
     table: Table = schema.load(table_dict).data
     results: Dict[str, Any] = schema.dump(table).data
 
+    is_editable = results['schema'] not in app.config['UNEDITABLE_SCHEMAS']
+
     # add role control, only admin can edit table
     if app.config['AUTH_USER_METHOD']:
         user = app.config['AUTH_USER_METHOD'](app)
-    else:
-        raise Exception('AUTH_USER_METHOD is not configured')
+        is_editable = is_editable and user.role_name == 'admin'
 
-    is_editable = results['schema'] not in app.config['UNEDITABLE_SCHEMAS'] and user.role_name == 'admin'
     results['is_editable'] = is_editable
 
     # TODO - Cleanup https://github.com/lyft/amundsen/issues/296

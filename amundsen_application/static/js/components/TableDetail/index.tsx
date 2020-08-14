@@ -258,7 +258,7 @@ export class TableDetail extends React.Component<
               {!!data.tblLocation && (
                 <section className="metadata-section">
                   <div className="section-title title-3">Table Location:</div>
-                  <div>{data.tblLocation}</div>
+                  <div className="wrapped-text">{data.tblLocation}</div>
                 </section>
               )}
               <section className="column-layout-2">
