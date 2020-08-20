@@ -34,7 +34,7 @@ requirements_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'r
 with open(requirements_path) as requirements_file:
     requirements = requirements_file.readlines()
 
-__version__ = '2.2.2'
+__version__ = '2.2.4'
 
 
 setup(
@@ -49,7 +49,7 @@ setup(
     dependency_links=[],
     install_requires=requirements,
     extras_require={
-        'oidc': ['flaskoidc-azure==0.0.6']
+        'oidc': ['flaskoidc-azure==0.0.7']
     },
     python_requires=">=3.6",
     entry_points="""
