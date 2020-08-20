@@ -78,6 +78,16 @@ export interface ProgrammaticDescription {
   source: string;
   text: string;
 }
+export interface TableProgrammaticDescriptions {
+  left?: ProgrammaticDescription[];
+  right?: ProgrammaticDescription[];
+  other?: ProgrammaticDescription[];
+}
+
+export interface ResourceReport {
+  name: string;
+  url: string;
+}
 
 export interface TableMetadata {
   badges: Badge[];
@@ -96,8 +106,9 @@ export interface TableMetadata {
   table_readers: TableReader[];
   source: TableSource;
   generator: TableGenerator;
+  resource_reports: ResourceReport[];
   watermarks: Watermark[];
-  programmatic_descriptions: ProgrammaticDescription[];
+  programmatic_descriptions: TableProgrammaticDescriptions;
   tblLocation: string;
 }
 

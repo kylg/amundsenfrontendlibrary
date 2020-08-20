@@ -74,7 +74,7 @@ amundsencommon-azure>=0.3.8,<1.0
 
 # Library for rest endpoints with Flask
 # Upstream url: https://github.com/flask-restful/flask-restful
-flask-restful==0.3.7
+flask-restful==0.3.8
 
 # Python wrapper module around the OpenSSL library
 pyopenssl==19.1.0

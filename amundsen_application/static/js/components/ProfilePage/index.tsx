@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import * as DocumentTitle from 'react-document-title';
 import * as Avatar from 'react-avatar';
@@ -8,6 +11,7 @@ import { bindActionCreators } from 'redux';
 import Breadcrumb from 'components/common/Breadcrumb';
 import Flag from 'components/common/Flag';
 import TabsComponent from 'components/common/TabsComponent';
+import { BadgeStyle } from 'config/config-types';
 
 import { GlobalState } from 'ducks/rootReducer';
 import { getUser, getUserOwn, getUserRead } from 'ducks/user/reducer';
@@ -39,6 +43,7 @@ import {
   FOOTER_TEXT_PREFIX,
   GITHUB_LINK_TEXT,
   ITEMS_PER_PAGE,
+  NOT_ACTIVE_USER_TEXT,
   OWNED_LABEL,
   OWNED_SOURCE,
   OWNED_TITLE_PREFIX,
@@ -209,12 +214,7 @@ export class ProfilePage extends React.Component<
       );
     } else {
       userName = (
-        <h1 className="h3 header-title-text truncated">
-          {user.display_name}
-          {!user.is_active && (
-            <Flag caseType="sentenceCase" labelStyle="danger" text="Alumni" />
-          )}
-        </h1>
+        <h1 className="h3 header-title-text truncated">{user.display_name}</h1>
       );
     }
 
@@ -230,6 +230,7 @@ export class ProfilePage extends React.Component<
             {user.manager_fullname && (
               <li id="user-manager">{`Manager: ${user.manager_fullname}`}</li>
             )}
+            {!user.is_active && <li id="alumni">{NOT_ACTIVE_USER_TEXT}</li>}
           </ul>
         </div>
       );

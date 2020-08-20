@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 @import 'variables';
 
 $icon-size: 24px;
@@ -18,11 +21,16 @@ $data-stores: (
 $dashboards: (
   dashboard: '/static/images/icons/dashboard.svg',
   mode: '/static/images/icons/logo-mode.svg',
+  redash: '/static/images/icons/logo-redash.svg',
 );
 
 // Map of User names and icon paths
 $users: (
   users: '/static/images/icons/users.svg',
+);
+
+$check: (
+  check: '/static/images/icons/check.svg',
 );
 
 // Given a Map of key/value pairs, generates a new class
@@ -39,6 +47,7 @@ span.icon {
   @include iconBackgrounds($data-stores);
   @include iconBackgrounds($dashboards);
   @include iconBackgrounds($users);
+  @include iconBackgrounds($check);
 
   background-color: $icon-bg;
   border: none;
@@ -51,6 +60,8 @@ span.icon {
 }
 
 img.icon {
+  /*DEPRECATED: follow behavior above to generate
+  icons*/
   background-color: $icon-bg;
   border: none;
   height: $icon-size;

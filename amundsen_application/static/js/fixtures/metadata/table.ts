@@ -107,7 +107,7 @@ export const tableMetadata: TableMetadata = {
     key: 'ds',
     value: '2020-03-05',
   },
-  programmatic_descriptions: [],
+  programmatic_descriptions: {},
   schema: 'base',
   source: {
     source:
@@ -118,6 +118,7 @@ export const tableMetadata: TableMetadata = {
     generator: 'https://airflow.apache.org/',
     generator_type: 'github',
   },
+  resource_reports: [{ name: 'Test report', url: 'http://localhost' }],
   table_readers: [
     {
       read_count: 1735,

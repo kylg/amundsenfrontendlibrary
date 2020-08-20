@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { TableColumn } from 'interfaces';
 import ColumnListItem from '../ColumnListItem';
@@ -7,11 +10,15 @@ import './styles.scss';
 interface ColumnListProps {
   columns?: TableColumn[];
   readOnly?: boolean;
+  editText?: string;
+  editUrl?: string;
 }
 
-const ColumnList: React.SFC<ColumnListProps> = ({
+const ColumnList: React.FC<ColumnListProps> = ({
   columns,
   readOnly,
+  editText,
+  editUrl,
 }: ColumnListProps) => {
   if (columns.length < 1) {
     return <div />;
@@ -24,6 +31,8 @@ const ColumnList: React.SFC<ColumnListProps> = ({
       data={entry}
       index={index}
       readOnly={readOnly}
+      editText={editText}
+      editUrl={editUrl}
     />
   ));
 
@@ -33,6 +42,8 @@ const ColumnList: React.SFC<ColumnListProps> = ({
 ColumnList.defaultProps = {
   columns: [] as TableColumn[],
   readOnly: false,
+  editText: '',
+  editUrl: '',
 };
 
 export default ColumnList;

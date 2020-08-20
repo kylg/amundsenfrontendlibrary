@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { shallow } from 'enzyme';
 import * as ConfigUtils from 'config/config-utils';
@@ -49,8 +52,9 @@ describe('ExploreButton', () => {
         },
         table_readers: [],
         source: { source: '', source_type: '' },
+        resource_reports: [],
         watermarks: [],
-        programmatic_descriptions: [],
+        programmatic_descriptions: {},
         ...tableDataOverrides,
       },
     };
@@ -75,18 +79,21 @@ describe('ExploreButton', () => {
 
     it('returns null if explore is not enabled', () => {
       mockExploreEnabled = false;
-      const { props, wrapper } = setup();
+      const { wrapper } = setup();
+
       expect(wrapper.instance().render()).toBeNull();
     });
 
     it('returns null if the generated url is empty', () => {
-      const { props, wrapper } = setup();
+      const { wrapper } = setup();
       mockExploreUrl = '';
+
       expect(wrapper.instance().render()).toBeNull();
     });
 
     it('renders a link to the explore URL', () => {
-      const { props, wrapper } = setup();
+      const { wrapper } = setup();
+
       expect(wrapper.find('a').props()).toMatchObject({
         href: mockExploreUrl,
         target: '_blank',

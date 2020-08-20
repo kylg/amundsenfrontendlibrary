@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 
 import { shallow } from 'enzyme';
@@ -34,7 +37,7 @@ describe('BookmarkIcon', () => {
       stopPropagation: jest.fn(),
     };
     it('stops propagation and prevents default', () => {
-      const { props, wrapper } = setup();
+      const { wrapper } = setup();
       wrapper.find('div').simulate('click', clickEvent);
       expect(clickEvent.preventDefault).toHaveBeenCalled();
       expect(clickEvent.stopPropagation).toHaveBeenCalled();
@@ -66,17 +69,17 @@ describe('BookmarkIcon', () => {
 
   describe('render', () => {
     it('renders an empty bookmark when not bookmarked', () => {
-      const { props, wrapper } = setup({ isBookmarked: false });
+      const { wrapper } = setup({ isBookmarked: false });
       expect(wrapper.find('.icon-bookmark').exists()).toBe(true);
     });
 
     it('renders a filled star when bookmarked', () => {
-      const { props, wrapper } = setup({ isBookmarked: true });
+      const { wrapper } = setup({ isBookmarked: true });
       expect(wrapper.find('.icon-bookmark-filled').exists()).toBe(true);
     });
 
     it('renders a large star when specified', () => {
-      const { props, wrapper } = setup({ large: true });
+      const { wrapper } = setup({ large: true });
       expect(wrapper.find('.bookmark-large').exists()).toBe(true);
     });
   });

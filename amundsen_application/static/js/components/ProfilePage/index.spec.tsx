@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import * as DocumentTitle from 'react-document-title';
 import * as Avatar from 'react-avatar';
@@ -17,6 +20,7 @@ import { ResourceType } from 'interfaces/Resources';
 import * as LogUtils from 'utils/logUtils';
 
 import { indexDashboardsEnabled } from 'config/config-utils';
+import { BadgeStyle } from 'config/config-types';
 import { AVATAR_SIZE } from './constants';
 import {
   mapDispatchToProps,
@@ -331,23 +335,6 @@ describe('ProfilePage', () => {
       );
     });
 
-    it('renders Flag with correct props if user not active', () => {
-      const userCopy = {
-        ...globalState.user.profile.user,
-        is_active: false,
-      };
-      const { wrapper } = setup({
-        user: userCopy,
-      });
-      expect(
-        wrapper.find('.header-title-text').find(Flag).props()
-      ).toMatchObject({
-        caseType: 'sentenceCase',
-        labelStyle: 'danger',
-        text: 'Alumni',
-      });
-    });
-
     it('renders user role', () => {
       expect(wrapper.find('#user-role').text()).toEqual('Tester');
     });
@@ -360,6 +347,18 @@ describe('ProfilePage', () => {
       expect(wrapper.find('#user-manager').text()).toEqual(
         'Manager: Test Manager'
       );
+    });
+
+    it('renders alumni bullet is user not active', () => {
+      const userCopy = {
+        ...globalState.user.profile.user,
+        is_active: false,
+      };
+      const { wrapper } = setup({
+        user: userCopy,
+      });
+      const expected = 1;
+      expect(wrapper.find('#alumni').length).toEqual(expected);
     });
 
     it('renders github link with correct href', () => {

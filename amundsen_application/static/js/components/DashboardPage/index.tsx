@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -5,10 +8,11 @@ import { Link } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router';
 import * as qs from 'simple-query-string';
 
+import * as ReactMarkdown from 'react-markdown';
+
 import AvatarLabel from 'components/common/AvatarLabel';
 import Breadcrumb from 'components/common/Breadcrumb';
 import BookmarkIcon from 'components/common/Bookmark/BookmarkIcon';
-import Flag from 'components/common/Flag';
 import EditableSection from 'components/common/EditableSection';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import TabsComponent from 'components/common/TabsComponent';
@@ -17,23 +21,25 @@ import { GetDashboardRequest } from 'ducks/dashboard/types';
 import { GlobalState } from 'ducks/rootReducer';
 import { logClick } from 'ducks/utilMethods';
 import { DashboardMetadata } from 'interfaces/Dashboard';
+import DashboardOwnerEditor from 'components/DashboardPage/DashboardOwnerEditor';
 import QueryList from 'components/DashboardPage/QueryList';
 import ChartList from 'components/DashboardPage/ChartList';
+import ResourceStatusMarker from 'components/common/ResourceStatusMarker';
 import { formatDateTimeShort } from 'utils/dateUtils';
 import ResourceList from 'components/common/ResourceList';
 import {
   ADD_DESC_TEXT,
   EDIT_DESC_TEXT,
-  DASHBOARD_OWNER_SOURCE,
+  OWNER_HEADER_TEXT,
   DASHBOARD_SOURCE,
-  LAST_RUN_SUCCEEDED,
-  NO_OWNER_TEXT,
   TABLES_PER_PAGE,
+  LAST_RUN_SUCCEEDED,
 } from 'components/DashboardPage/constants';
-import TagInput from 'components/Tags/TagInput';
+import TagInput from 'components/common/Tags/TagInput';
 import { ResourceType } from 'interfaces';
 
 import { getSourceDisplayName, getSourceIconClass } from 'config/config-utils';
+import { BadgeStyle } from 'config/config-types';
 
 import { getLoggingParams } from 'utils/logUtils';
 
@@ -42,12 +48,15 @@ import ImagePreview from './ImagePreview';
 
 import './styles.scss';
 
-const STATUS_SUCCESS = 'success';
-const STATUS_DANGER = 'danger';
-
 interface DashboardPageState {
   uri: string;
 }
+
+type TabInfo = {
+  content: JSX.Element;
+  key: string;
+  title: string;
+};
 
 export interface StateFromProps {
   isLoading: boolean;
@@ -100,15 +109,16 @@ export class DashboardPage extends React.Component<
     }
   }
 
-  mapStatusToStyle = (status: string): string => {
+  mapStatusToBoolean = (status: string): boolean => {
     if (status === LAST_RUN_SUCCEEDED) {
-      return STATUS_SUCCESS;
+      return true;
     }
-    return STATUS_DANGER;
+    return false;
   };
 
   renderTabs() {
-    const tabInfo = [];
+    const tabInfo: TabInfo[] = [];
+
     tabInfo.push({
       content: (
         <ResourceList
@@ -130,7 +140,12 @@ export class DashboardPage extends React.Component<
     }
 
     tabInfo.push({
-      content: <QueryList queries={this.props.dashboard.queries} />,
+      content: (
+        <QueryList
+          product={this.props.dashboard.product}
+          queries={this.props.dashboard.queries}
+        />
+      ),
       key: 'queries',
       title: `Queries (${this.props.dashboard.queries.length})`,
     });
@@ -212,8 +227,8 @@ export class DashboardPage extends React.Component<
               )}`}
             >
               {hasDescription && (
-                <div className="body-2 and text-primary">
-                  {dashboard.description}
+                <div className="markdown-wrapper">
+                  <ReactMarkdown source={dashboard.description} />
                 </div>
               )}
               {!hasDescription && (
@@ -232,27 +247,9 @@ export class DashboardPage extends React.Component<
             </EditableSection>
             <section className="column-layout-2">
               <section className="left-panel">
-                <section className="metadata-section">
-                  <div className="section-title title-3">Owners</div>
-                  <div>
-                    {dashboard.owners.length > 0 &&
-                      dashboard.owners.map((owner) => (
-                        <Link
-                          key={owner.user_id}
-                          to={`/user/${owner.user_id}?source=${DASHBOARD_OWNER_SOURCE}`}
-                        >
-                          <AvatarLabel label={owner.display_name} />
-                        </Link>
-                      ))}
-                    {dashboard.owners.length === 0 && (
-                      <AvatarLabel
-                        avatarClass="gray-avatar"
-                        labelClass="text-placeholder"
-                        label={NO_OWNER_TEXT}
-                      />
-                    )}
-                  </div>
-                </section>
+                <EditableSection title={OWNER_HEADER_TEXT} readOnly>
+                  <DashboardOwnerEditor resourceType={ResourceType.dashboard} />
+                </EditableSection>
                 <section className="metadata-section">
                   <div className="section-title title-3">Created</div>
                   <time className="body-2 text-primary">
@@ -307,10 +304,9 @@ export class DashboardPage extends React.Component<
                         : NO_TIMESTAMP_TEXT}
                     </time>
                     <div className="last-run-state">
-                      <Flag
-                        caseType="sentenceCase"
-                        text={dashboard.last_run_state}
-                        labelStyle={this.mapStatusToStyle(
+                      <ResourceStatusMarker
+                        stateText={dashboard.last_run_state}
+                        succeeded={this.mapStatusToBoolean(
                           dashboard.last_run_state
                         )}
                       />

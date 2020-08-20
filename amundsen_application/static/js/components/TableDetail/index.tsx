@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import * as DocumentTitle from 'react-document-title';
 import { connect } from 'react-redux';
@@ -7,22 +10,30 @@ import { RouteComponentProps } from 'react-router';
 import { GlobalState } from 'ducks/rootReducer';
 import { getTableData } from 'ducks/tableMetadata/reducer';
 import { GetTableDataRequest } from 'ducks/tableMetadata/types';
+import { BadgeStyle } from 'config/config-types';
 
-import AppConfig from 'config/config';
+import {
+  getMaxLength,
+  getSourceIconClass,
+  indexDashboardsEnabled,
+  issueTrackingEnabled,
+  notificationsEnabled,
+} from 'config/config-utils';
+
 import BadgeList from 'components/common/BadgeList';
 import BookmarkIcon from 'components/common/Bookmark/BookmarkIcon';
 import Breadcrumb from 'components/common/Breadcrumb';
 import TabsComponent from 'components/common/TabsComponent';
+import TagInput from 'components/common/Tags/TagInput';
 import EditableText from 'components/common/EditableText';
 import LoadingSpinner from 'components/common/LoadingSpinner';
-import Flag from 'components/common/Flag';
 
 import ColumnList from 'components/TableDetail/ColumnList';
 import DataPreviewButton from 'components/TableDetail/DataPreviewButton';
 import ExploreButton from 'components/TableDetail/ExploreButton';
 import FrequentUsers from 'components/TableDetail/FrequentUsers';
 import LineageLink from 'components/TableDetail/LineageLink';
-import OwnerEditor from 'components/TableDetail/OwnerEditor';
+import TableOwnerEditor from 'components/TableDetail/TableOwnerEditor';
 import SourceLink from 'components/TableDetail/SourceLink';
 import GeneratorLink from 'components/TableDetail/GeneratorLink';
 import TableDashboardResourceList from 'components/TableDetail/TableDashboardResourceList';
@@ -31,17 +42,15 @@ import TableHeaderBullets from 'components/TableDetail/TableHeaderBullets';
 import TableIssues from 'components/TableDetail/TableIssues';
 import WatermarkLabel from 'components/TableDetail/WatermarkLabel';
 import WriterLink from 'components/TableDetail/WriterLink';
-import TagInput from 'components/Tags/TagInput';
-import { ResourceType, TableMetadata } from 'interfaces';
-
-import EditableSection from 'components/common/EditableSection';
 
 import {
-  getSourceIconClass,
-  indexDashboardsEnabled,
-  issueTrackingEnabled,
-  notificationsEnabled,
-} from 'config/config-utils';
+  ProgrammaticDescription,
+  ResourceType,
+  TableMetadata,
+} from 'interfaces';
+
+import EditableSection from 'components/common/EditableSection';
+import TableReportsDropdown from 'components/TableDetail/ResourceReportsDropdown';
 
 import { formatDateTimeShort } from 'utils/dateUtils';
 import { getLoggingParams } from 'utils/logUtils';
@@ -49,12 +58,7 @@ import { getLoggingParams } from 'utils/logUtils';
 import RequestDescriptionText from './RequestDescriptionText';
 import RequestMetadataForm from './RequestMetadataForm';
 
-import {
-  PROGRMMATIC_DESC_HEADER,
-  ERROR_MESSAGE,
-  EDIT_PROMPT,
-  EDIT_URL,
-} from './constants';
+import { ERROR_MESSAGE, EDIT_DESC_TEXT } from './constants';
 
 import './styles.scss';
 
@@ -137,7 +141,24 @@ export class TableDetail extends React.Component<
     return `${params.database}://${params.cluster}.${params.schema}/${params.table}`;
   }
 
-  renderTabs() {
+  renderProgrammaticDesc = (descriptions: ProgrammaticDescription[]) => {
+    if (!descriptions) {
+      return null;
+    }
+
+    return descriptions.map((d) => (
+      <EditableSection key={`prog_desc:${d.source}`} title={d.source} readOnly>
+        <EditableText
+          maxLength={999999}
+          value={d.text}
+          editable={false}
+          onSubmitValue={null}
+        />
+      </EditableSection>
+    ));
+  };
+
+  renderTabs(editText, editUrl) {
     const tabInfo = [];
 
     // Default Column content
@@ -146,6 +167,8 @@ export class TableDetail extends React.Component<
         <ColumnList
           columns={this.props.tableData.columns}
           readOnly={!this.props.tableData.is_editable}
+          editText={editText}
+          editUrl={editUrl}
         />
       ),
       key: 'columns',
@@ -186,6 +209,10 @@ export class TableDetail extends React.Component<
       innerContent = <ErrorMessage />;
     } else {
       const data = tableData;
+      const editText = data.source
+        ? `${EDIT_DESC_TEXT} ${data.source.source_type}`
+        : '';
+      const editUrl = data.source ? data.source.source : '';
 
       innerContent = (
         <div className="resource-detail-layout table-detail">
@@ -212,11 +239,9 @@ export class TableDetail extends React.Component<
                 <TableHeaderBullets
                   database={data.database}
                   cluster={data.cluster}
+                  isView={data.is_view}
                 />
                 {data.badges.length > 0 && <BadgeList badges={data.badges} />}
-                {data.is_view && (
-                  <Flag text="table view" labelStyle="warning" />
-                )}
               </div>
             </div>
             <div className="header-section header-links">
@@ -226,6 +251,7 @@ export class TableDetail extends React.Component<
               <GeneratorLink tableGenerator={data.generator} />
             </div>
             <div className="header-section header-buttons">
+              <TableReportsDropdown resourceReports={data.resource_reports} />
               <DataPreviewButton modalTitle={this.getDisplayName()} />
               <ExploreButton tableData={data} />
             </div>
@@ -235,11 +261,11 @@ export class TableDetail extends React.Component<
               <EditableSection
                 title="Description"
                 readOnly={!data.is_editable}
-                editText={EDIT_PROMPT}
-                editUrl={EDIT_URL}
+                editText={editText}
+                editUrl={editUrl}
               >
                 <TableDescEditableText
-                  maxLength={AppConfig.editableText.tableDescLength}
+                  maxLength={getMaxLength('tableDescLength')}
                   value={data.description}
                   editable={data.is_editable}
                 />
@@ -283,13 +309,16 @@ export class TableDetail extends React.Component<
                     <div className="section-title title-3">Frequent Users</div>
                     <FrequentUsers readers={data.table_readers} />
                   </section>
+                  {this.renderProgrammaticDesc(
+                    data.programmatic_descriptions.left
+                  )}
                 </section>
                 <section className="right-panel">
                   <EditableSection
                     title="Tags"
                     readOnly={!data.is_editable}
-                    editText={EDIT_PROMPT}
-                    editUrl={EDIT_URL}
+                    editText={editText}
+                    editUrl={editUrl}
                   >
                     <TagInput
                       resourceType={ResourceType.table}
@@ -299,35 +328,23 @@ export class TableDetail extends React.Component<
                   <EditableSection
                     title="Owners"
                     readOnly={!data.is_editable}
-                    editText={EDIT_PROMPT}
-                    editUrl={EDIT_URL}
+                    editText={editText}
+                    editUrl={editUrl}
                   >
-                    <OwnerEditor />
+                    <TableOwnerEditor resourceType={ResourceType.table} />
                   </EditableSection>
+                  {this.renderProgrammaticDesc(
+                    data.programmatic_descriptions.right
+                  )}
                 </section>
               </section>
-              {data.programmatic_descriptions.length > 0 && (
-                <>
-                  <div className="programmatic-title title-4">
-                    {PROGRMMATIC_DESC_HEADER}
-                  </div>
-                  <hr className="programmatic-hr hr1" />
-                </>
+              {this.renderProgrammaticDesc(
+                data.programmatic_descriptions.other
               )}
-              {data.programmatic_descriptions.map((d) => (
-                <section key={d.source} className="column-layout-2">
-                  <EditableSection title={d.source} readOnly>
-                    <EditableText
-                      maxLength={999999}
-                      value={d.text}
-                      editable={false}
-                      onSubmitValue={null}
-                    />
-                  </EditableSection>
-                </section>
-              ))}
             </aside>
-            <main className="right-panel">{this.renderTabs()}</main>
+            <main className="right-panel">
+              {this.renderTabs(editText, editUrl)}
+            </main>
           </div>
         </div>
       );

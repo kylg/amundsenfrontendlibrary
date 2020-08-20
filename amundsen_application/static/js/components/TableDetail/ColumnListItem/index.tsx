@@ -1,3 +1,6 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
 import { Dropdown, MenuItem, OverlayTrigger, Popover } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
@@ -5,18 +8,17 @@ import { connect } from 'react-redux';
 
 import ColumnDescEditableText from 'components/TableDetail/ColumnDescEditableText';
 import ColumnStats from 'components/TableDetail/ColumnStats';
-import { notificationsEnabled } from 'config/config-utils';
+import { notificationsEnabled, getMaxLength } from 'config/config-utils';
 import { openRequestDescriptionDialog } from 'ducks/notification/reducer';
 import { OpenRequestAction } from 'ducks/notification/types';
 import { logClick } from 'ducks/utilMethods';
 import { RequestMetadataType, TableColumn } from 'interfaces';
 
-import { EDIT_PROMPT, EDIT_URL } from '../constants';
-
 import './styles.scss';
 import EditableSection from 'components/common/EditableSection';
 
 const MORE_BUTTON_TEXT = 'More options';
+const EDITABLE_SECTION_TITLE = 'Description';
 
 interface DispatchFromProps {
   openRequestDescriptionDialog: (
@@ -28,7 +30,8 @@ interface DispatchFromProps {
 interface OwnProps {
   data: TableColumn;
   index: number;
-  readOnly?: boolean;
+  editText: string;
+  editUrl: string;
 }
 
 interface ColumnListItemState {
@@ -49,15 +52,19 @@ export class ColumnListItem extends React.Component<
   }
 
   toggleExpand = (e) => {
+    const metadata = this.props.data;
     if (!this.state.isExpanded) {
-      const metadata = this.props.data;
       logClick(e, {
         target_id: `column::${metadata.name}`,
         target_type: 'column stats',
         label: `${metadata.name} ${metadata.col_type}`,
       });
     }
-    this.setState({ isExpanded: !this.state.isExpanded });
+    if (this.shouldRenderDescription() || metadata.stats.length !== 0) {
+      this.setState((prevState) => ({
+        isExpanded: !prevState.isExpanded,
+      }));
+    }
   };
 
   openRequest = () => {
@@ -69,6 +76,17 @@ export class ColumnListItem extends React.Component<
 
   stopPropagation = (e) => {
     e.stopPropagation();
+  };
+
+  shouldRenderDescription = (): boolean => {
+    const { data, editText, editUrl } = this.props;
+    if (data.description) {
+      return true;
+    }
+    if (!editText && !editUrl && !data.is_editable) {
+      return false;
+    }
+    return true;
   };
 
   renderColumnType = (columnIndex: number, type: string) => {
@@ -170,18 +188,21 @@ export class ColumnListItem extends React.Component<
           {this.state.isExpanded && (
             <section className="expanded-content">
               <div className="stop-propagation" onClick={this.stopPropagation}>
-                <EditableSection
-                  title="Description"
-                  readOnly={this.props.readOnly}
-                  editText={EDIT_PROMPT}
-                  editUrl={EDIT_URL}
-                >
-                  <ColumnDescEditableText
-                    columnIndex={this.props.index}
-                    editable={metadata.is_editable}
-                    value={metadata.description}
-                  />
-                </EditableSection>
+                {this.shouldRenderDescription() && (
+                  <EditableSection
+                    title={EDITABLE_SECTION_TITLE}
+                    readOnly={!metadata.is_editable}
+                    editText={this.props.editText}
+                    editUrl={this.props.editUrl}
+                  >
+                    <ColumnDescEditableText
+                      columnIndex={this.props.index}
+                      editable={metadata.is_editable}
+                      maxLength={getMaxLength('columnDescLength')}
+                      value={metadata.description}
+                    />
+                  </EditableSection>
+                )}
               </div>
               <ColumnStats stats={metadata.stats} />
             </section>

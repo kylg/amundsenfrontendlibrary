@@ -1,20 +1,22 @@
+// Copyright Contributors to the Amundsen project.
+// SPDX-License-Identifier: Apache-2.0
+
 import * as React from 'react';
+import * as ReactMarkdown from 'react-markdown';
 import * as History from 'history';
 
 import { shallow } from 'enzyme';
 
-import AvatarLabel from 'components/common/AvatarLabel';
 import LoadingSpinner from 'components/common/LoadingSpinner';
 import Breadcrumb from 'components/common/Breadcrumb';
 import BookmarkIcon from 'components/common/Bookmark/BookmarkIcon';
-import Flag from 'components/common/Flag';
 import ResourceList from 'components/common/ResourceList';
 import TabsComponent from 'components/common/TabsComponent';
 import { dashboardMetadata } from 'fixtures/metadata/dashboard';
 import { NO_TIMESTAMP_TEXT } from 'components/constants';
-import * as LogUtils from 'utils/logUtils';
 import { ResourceType } from 'interfaces';
 import ChartList from './ChartList';
+import DashboardOwnerEditor from './DashboardOwnerEditor';
 import ImagePreview from './ImagePreview';
 
 import { DashboardPage, DashboardPageProps, MatchProps } from '.';
@@ -135,26 +137,6 @@ describe('DashboardPage', () => {
     });
   });
 
-  describe('mapStatusToStyle', () => {
-    let wrapper;
-
-    beforeAll(() => {
-      ({ wrapper } = setup());
-    });
-
-    it('returns success if status === LAST_RUN_SUCCEEDED', () => {
-      expect(
-        wrapper.instance().mapStatusToStyle(Constants.LAST_RUN_SUCCEEDED)
-      ).toBe('success');
-    });
-
-    it('returns danger if status !== LAST_RUN_SUCCEEDED', () => {
-      expect(wrapper.instance().mapStatusToStyle('anythingelse')).toBe(
-        'danger'
-      );
-    });
-  });
-
   describe('render', () => {
     const { props, wrapper } = setup();
 
@@ -182,6 +164,14 @@ describe('DashboardPage', () => {
     });
 
     describe('renders description', () => {
+      it('using a ReactMarkdown component', () => {
+        const markdown = wrapper.find(ReactMarkdown);
+        expect(markdown.exists()).toBe(true);
+        expect(markdown.props()).toMatchObject({
+          source: props.dashboard.description,
+        });
+      });
+
       it('with link to add description if none exists', () => {
         const { wrapper } = setup({
           dashboard: {
@@ -198,33 +188,18 @@ describe('DashboardPage', () => {
       });
     });
 
-    describe('renders owners', () => {
-      it('with correct AvatarLabel if no owners exist', () => {
-        const { wrapper } = setup({
-          dashboard: {
-            ...dashboardMetadata,
-            owners: [],
-          },
-        });
-
-        expect(wrapper.find(AvatarLabel).props().label).toBe(
-          Constants.NO_OWNER_TEXT
-        );
-      });
+    it('renders owners', () => {
+      const { wrapper } = setup();
+      expect(wrapper.find(DashboardOwnerEditor).exists()).toBe(true);
     });
 
-    it('renders a Flag for last run state', () => {
-      const mapStatusToStyleSpy = jest
-        .spyOn(wrapper.instance(), 'mapStatusToStyle')
-        .mockImplementationOnce(() => 'testStyle');
-      wrapper.instance().forceUpdate();
-      const element = wrapper.find('.last-run-state').find(Flag);
+    it('renders a ResourceStatusMarker for last run state', () => {
+      const expected = 1;
+      const actual = wrapper
+        .find('.last-run-state')
+        .find('ResourceStatusMarker').length;
 
-      expect(element.props().text).toBe(props.dashboard.last_run_state);
-      expect(mapStatusToStyleSpy).toHaveBeenCalledWith(
-        props.dashboard.last_run_state
-      );
-      expect(element.props().labelStyle).toBe('testStyle');
+      expect(actual).toEqual(expected);
     });
 
     it('renders an ImagePreview with correct props', () => {

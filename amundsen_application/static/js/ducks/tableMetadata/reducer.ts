@@ -5,7 +5,6 @@ import {
   PreviewQueryParams,
   TableMetadata,
   Tag,
-  User,
 } from 'interfaces';
 
 import {
@@ -24,9 +23,6 @@ import {
   GetColumnDescriptionRequest,
   UpdateColumnDescription,
   UpdateColumnDescriptionRequest,
-  GetLastIndexed,
-  GetLastIndexedRequest,
-  GetLastIndexedResponse,
   GetPreviewData,
   GetPreviewDataRequest,
   GetPreviewDataResponse,
@@ -37,6 +33,40 @@ import tableOwnersReducer, {
   initialOwnersState,
   TableOwnerReducerState,
 } from './owners/reducer';
+
+export const initialPreviewState = {
+  data: {},
+  status: null,
+};
+
+export const initialTableDataState: TableMetadata = {
+  badges: [],
+  cluster: '',
+  columns: [],
+  database: '',
+  is_editable: false,
+  is_view: false,
+  key: '',
+  last_updated_timestamp: 0,
+  schema: '',
+  name: '',
+  description: '',
+  table_writer: { application_url: '', description: '', id: '', name: '' },
+  partition: { is_partitioned: false },
+  table_readers: [],
+  source: { source: '', source_type: '' },
+  resource_reports: [],
+  watermarks: [],
+  programmatic_descriptions: {},
+};
+
+export const initialState: TableMetadataReducerState = {
+  isLoading: true,
+  preview: initialPreviewState,
+  statusCode: null,
+  tableData: initialTableDataState,
+  tableOwners: initialOwnersState,
+};
 
 /* ACTIONS */
 export function getTableData(
@@ -53,6 +83,7 @@ export function getTableData(
     type: GetTableData.REQUEST,
   };
 }
+
 export function getTableDataFailure(): GetTableDataResponse {
   return {
     type: GetTableData.FAILURE,
@@ -64,6 +95,7 @@ export function getTableDataFailure(): GetTableDataResponse {
     },
   };
 }
+
 export function getTableDataSuccess(
   data: TableMetadata,
   owners: OwnerDict,
@@ -194,23 +226,6 @@ export function updateColumnDescription(
   };
 }
 
-export function getLastIndexed(): GetLastIndexedRequest {
-  return { type: GetLastIndexed.REQUEST };
-}
-export function getLastIndexedFailure(): GetLastIndexedResponse {
-  return { type: GetLastIndexed.FAILURE };
-}
-export function getLastIndexedSuccess(
-  lastIndexedEpoch: number
-): GetLastIndexedResponse {
-  return {
-    type: GetLastIndexed.SUCCESS,
-    payload: {
-      lastIndexedEpoch,
-    },
-  };
-}
-
 export function getPreviewData(
   queryParams: PreviewQueryParams
 ): GetPreviewDataRequest {
@@ -249,7 +264,6 @@ export interface TableMetadataReducerState {
     errorMessage?: string;
   };
   isLoading: boolean;
-  lastIndexed: number;
   preview: {
     data: PreviewData;
     status: number | null;
@@ -259,6 +273,7 @@ export interface TableMetadataReducerState {
   tableOwners: TableOwnerReducerState;
 }
 
+<<<<<<< HEAD
 export const initialPreviewState = {
   data: {},
   status: null,
@@ -295,6 +310,8 @@ export const initialState: TableMetadataReducerState = {
   tableOwners: initialOwnersState,
 };
 
+=======
+>>>>>>> d2f222ea5cb648fb4a9d9bd2e242a3b36281098d
 export default function reducer(
   state: TableMetadataReducerState = initialState,
   action
@@ -339,13 +356,6 @@ export default function reducer(
       return {
         ...state,
         tableData: (<GetColumnDescriptionResponse>action).payload.tableMetadata,
-      };
-    case GetLastIndexed.FAILURE:
-      return { ...state, lastIndexed: null };
-    case GetLastIndexed.SUCCESS:
-      return {
-        ...state,
-        lastIndexed: (<GetLastIndexedResponse>action).payload.lastIndexedEpoch,
       };
     case GetPreviewData.FAILURE:
     case GetPreviewData.SUCCESS:
