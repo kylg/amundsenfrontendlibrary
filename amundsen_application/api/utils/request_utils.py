@@ -12,7 +12,7 @@ def get_query_param(args: Dict, param: str, error_msg: str = None) -> str:
     return value
 
 
-def request_metadata(*,     # type: ignore
+def request_metadata(*,  # type: ignore
                      url: str,
                      method: str = 'GET',
                      headers=None,
@@ -43,7 +43,7 @@ def request_metadata(*,     # type: ignore
                            data=data)
 
 
-def request_search(*,     # type: ignore
+def request_search(*,  # type: ignore
                    url: str,
                    method: str = 'GET',
                    headers=None,
@@ -75,6 +75,9 @@ def request_search(*,     # type: ignore
                            data=data)
 
 
+session = requests.Session()
+
+
 # TODO: Define an interface for envoy_client
 def request_wrapper(method: str, url: str, client, headers, timeout_sec: int, data=None):  # type: ignore
     """
@@ -102,14 +105,15 @@ def request_wrapper(method: str, url: str, client, headers, timeout_sec: int, da
         else:
             raise Exception('Method not allowed: {}'.format(method))
     else:
-        with requests.Session() as s:
-            if method == 'DELETE':
-                return s.delete(url, headers=headers, timeout=timeout_sec)
-            elif method == 'GET':
-                return s.get(url, headers=headers, timeout=timeout_sec)
-            elif method == 'POST':
-                return s.post(url, headers=headers, timeout=timeout_sec, data=data)
-            elif method == 'PUT':
-                return s.put(url, headers=headers, timeout=timeout_sec, data=data)
-            else:
-                raise Exception('Method not allowed: {}'.format(method))
+        s = session
+        # with requests.Session() as s:
+        if method == 'DELETE':
+            return s.delete(url, headers=headers, timeout=timeout_sec)
+        elif method == 'GET':
+            return s.get(url, headers=headers, timeout=timeout_sec)
+        elif method == 'POST':
+            return s.post(url, headers=headers, timeout=timeout_sec, data=data)
+        elif method == 'PUT':
+            return s.put(url, headers=headers, timeout=timeout_sec, data=data)
+        else:
+            raise Exception('Method not allowed: {}'.format(method))
