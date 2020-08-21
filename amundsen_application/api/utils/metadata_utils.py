@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import logging
+import os
 
 from typing import Any, Dict, List
 
@@ -121,6 +122,11 @@ def marshall_table_full(table_dict: Dict) -> Dict:
     prog_descriptions = results['programmatic_descriptions']
     results['programmatic_descriptions'] = _convert_prog_descriptions(prog_descriptions)
 
+    # We add System Administrator contact
+    if os.getenv('ADMIN_NAME') and os.getenv('ADMIN_URL'):
+        results['admin_name'] = os.getenv('ADMIN_NAME', 'Jerry')
+        results['admin_url'] = os.getenv('ADMIN_URL', 'mailto:info@kylg.org')
+
     return results
 
 
@@ -186,7 +192,7 @@ def _convert_prog_descriptions(prog_descriptions: List = None) -> Dict:
 
             other_config = dict(filter(lambda x: x not in ['LEFT', 'RIGHT'], prog_display_config.items()))
             other = list(filter(lambda x: x.get('source') not in left_config and x.get('source')
-                                not in right_config, prog_descriptions))
+                                          not in right_config, prog_descriptions))
             other.sort(key=lambda x: _sort_prog_descriptions(other_config, x))
 
     updated_descriptions['left'] = left

@@ -110,6 +110,8 @@ export interface TableMetadata {
   watermarks: Watermark[];
   programmatic_descriptions: TableProgrammaticDescriptions;
   tblLocation: string;
+  admin_name: string;
+  admin_url: string;
 }
 
 export interface UpdateOwnerPayload {

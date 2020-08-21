@@ -176,6 +176,8 @@ const globalState: GlobalState = {
       resource_reports: [],
       watermarks: [],
       programmatic_descriptions: {},
+      admin_name: '',
+      admin_url: '',
     },
     tableOwners: {
       isLoading: true,

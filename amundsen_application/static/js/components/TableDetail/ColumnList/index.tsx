@@ -9,14 +9,12 @@ import './styles.scss';
 
 interface ColumnListProps {
   columns?: TableColumn[];
-  readOnly?: boolean;
   editText?: string;
   editUrl?: string;
 }
 
 const ColumnList: React.FC<ColumnListProps> = ({
   columns,
-  readOnly,
   editText,
   editUrl,
 }: ColumnListProps) => {
@@ -30,7 +28,6 @@ const ColumnList: React.FC<ColumnListProps> = ({
       key={`column:${index}`}
       data={entry}
       index={index}
-      readOnly={readOnly}
       editText={editText}
       editUrl={editUrl}
     />
@@ -41,7 +38,6 @@ const ColumnList: React.FC<ColumnListProps> = ({
 
 ColumnList.defaultProps = {
   columns: [] as TableColumn[],
-  readOnly: false,
   editText: '',
   editUrl: '',
 };

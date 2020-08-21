@@ -166,7 +166,6 @@ export class TableDetail extends React.Component<
       content: (
         <ColumnList
           columns={this.props.tableData.columns}
-          readOnly={!this.props.tableData.is_editable}
           editText={editText}
           editUrl={editUrl}
         />
@@ -210,9 +209,9 @@ export class TableDetail extends React.Component<
     } else {
       const data = tableData;
       const editText = data.source
-        ? `${EDIT_DESC_TEXT} ${data.source.source_type}`
+        ? `${EDIT_DESC_TEXT} ${data.admin_name}`
         : '';
-      const editUrl = data.source ? data.source.source : '';
+      const editUrl = data.source ? data.admin_url : '';
 
       innerContent = (
         <div className="resource-detail-layout table-detail">

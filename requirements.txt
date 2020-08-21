@@ -1,7 +1,7 @@
 # The modular source code checker: pep8, pyflakes and co
 # License: MIT
 # Upstream url: http://bitbucket.org/tarek/flake8
-flake8==3.5.0
+flake8==3.7.8
 
 # A flake8 plugin that helps you write tidier imports.
 # License: ISCL
@@ -11,7 +11,7 @@ flake8-tidy-imports==1.1.0
 # A mature full-featured Python testing tool.
 # License: MIT
 # Upstream url: http://pytest.org/
-pytest==3.5.1
+pytest>=4.6
 
 # Pytest plugin for measuring coverage.
 # License: MIT
@@ -31,7 +31,7 @@ pytest-mock==1.1
 # Mypy is an optional static type checker for Python.
 # License: MIT
 # Upstream url: https://github.com/python/mypy
-mypy==0.660
+mypy==0.782
 
 # PEP 484
 # License: PSF
@@ -41,7 +41,7 @@ typing==3.6.4
 # A lightweight WSGI web application framework
 # License: BSD
 # Upstream url: https://github.com/pallets/flask
-flask==1.0.2
+flask==1.1.1
 
 # The wheel project provides a bdist_wheel command for setuptools >= 0.8.0
 # License: MIT

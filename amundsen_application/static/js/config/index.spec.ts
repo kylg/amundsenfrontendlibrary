@@ -252,6 +252,8 @@ describe('generateExploreUrl', () => {
     resource_reports: [],
     watermarks: [],
     programmatic_descriptions: {},
+    admin_name: '',
+    admin_url: '',
   };
 
   it('calls `exploreUrlGenerator` with table metadata', () => {

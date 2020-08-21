@@ -101,6 +101,8 @@ export const tableMetadata: TableMetadata = {
   key: 'hive://gold.base/rides',
   last_updated_timestamp: 1583469780,
   tblLocation: '',
+  admin_name: '',
+  admin_url: '',
   name: 'rides',
   partition: {
     is_partitioned: true,

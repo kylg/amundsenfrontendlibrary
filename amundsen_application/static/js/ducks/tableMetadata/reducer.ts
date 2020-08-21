@@ -55,9 +55,13 @@ export const initialTableDataState: TableMetadata = {
   partition: { is_partitioned: false },
   table_readers: [],
   source: { source: '', source_type: '' },
+  generator: {generator: '', generator_type: ''},
   resource_reports: [],
   watermarks: [],
   programmatic_descriptions: {},
+  tblLocation: '',
+  admin_name: '',
+  admin_url: '',
 };
 
 export const initialState: TableMetadataReducerState = {
@@ -273,45 +277,6 @@ export interface TableMetadataReducerState {
   tableOwners: TableOwnerReducerState;
 }
 
-<<<<<<< HEAD
-export const initialPreviewState = {
-  data: {},
-  status: null,
-};
-
-export const initialTableDataState: TableMetadata = {
-  badges: [],
-  cluster: '',
-  columns: [],
-  database: '',
-  is_editable: false,
-  is_view: false,
-  key: '',
-  last_updated_timestamp: 0,
-  tblLocation: '',
-  schema: '',
-  name: '',
-  description: '',
-  table_writer: { application_url: '', description: '', id: '', name: '' },
-  partition: { is_partitioned: false },
-  table_readers: [],
-  source: { source: '', source_type: '' },
-  generator: { generator: '', generator_type: '' },
-  watermarks: [],
-  programmatic_descriptions: [],
-};
-
-export const initialState: TableMetadataReducerState = {
-  isLoading: true,
-  lastIndexed: null,
-  preview: initialPreviewState,
-  statusCode: null,
-  tableData: initialTableDataState,
-  tableOwners: initialOwnersState,
-};
-
-=======
->>>>>>> d2f222ea5cb648fb4a9d9bd2e242a3b36281098d
 export default function reducer(
   state: TableMetadataReducerState = initialState,
   action
