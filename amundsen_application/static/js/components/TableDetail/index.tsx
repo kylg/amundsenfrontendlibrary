@@ -208,10 +208,8 @@ export class TableDetail extends React.Component<
       innerContent = <ErrorMessage />;
     } else {
       const data = tableData;
-      const editText = data.source
-        ? `${EDIT_DESC_TEXT} ${data.admin_name}`
-        : '';
-      const editUrl = data.source ? data.admin_url : '';
+      const editText = `${EDIT_DESC_TEXT} ${data.admin_name}`;
+      const editUrl = data.admin_url;
 
       innerContent = (
         <div className="resource-detail-layout table-detail">
