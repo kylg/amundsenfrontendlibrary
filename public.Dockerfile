@@ -23,7 +23,6 @@ CMD [ "python3",  "amundsen_application/wsgi.py" ]
 
 FROM base as oidc-release
 
-#COPY ssl_cert /app/ssl_cert
 RUN pip3 install .[oidc]
 ENV FRONTEND_SVC_CONFIG_MODULE_CLASS amundsen_application.oidc_config.OidcConfig
 ENV APP_WRAPPER flaskoidc_azure
@@ -35,6 +34,5 @@ ENV FLASK_OIDC_SQLALCHEMY_DATABASE_URI sqlite:///sessions.db
 # FLASK_OIDC_CLIENT_SECRETS - a path to a client_secrets.json file
 # FLASK_OIDC_SECRET_KEY - A secret key from your oidc provider
 # You will also need to mount a volume for the clients_secrets.json file.
-ENV FLASK_OIDC_CLIENT_SECRETS ssl_cert/client_secrets.json
 
 FROM base as release
