@@ -55,7 +55,6 @@ export const initialTableDataState: TableMetadata = {
   partition: { is_partitioned: false },
   table_readers: [],
   source: { source: '', source_type: '' },
-  generator: {generator: '', generator_type: ''},
   resource_reports: [],
   watermarks: [],
   programmatic_descriptions: {},

@@ -116,10 +116,6 @@ export const tableMetadata: TableMetadata = {
       'https://github.com/lyft/etl/blob/master/sql/hive/base/rides.config',
     source_type: 'github',
   },
-  generator: {
-    generator: 'https://airflow.apache.org/',
-    generator_type: 'github',
-  },
   resource_reports: [{ name: 'Test report', url: 'http://localhost' }],
   table_readers: [
     {

@@ -35,7 +35,6 @@ import FrequentUsers from 'components/TableDetail/FrequentUsers';
 import LineageLink from 'components/TableDetail/LineageLink';
 import TableOwnerEditor from 'components/TableDetail/TableOwnerEditor';
 import SourceLink from 'components/TableDetail/SourceLink';
-import GeneratorLink from 'components/TableDetail/GeneratorLink';
 import TableDashboardResourceList from 'components/TableDetail/TableDashboardResourceList';
 import TableDescEditableText from 'components/TableDetail/TableDescEditableText';
 import TableHeaderBullets from 'components/TableDetail/TableHeaderBullets';
@@ -245,7 +244,6 @@ export class TableDetail extends React.Component<
               <WriterLink tableWriter={data.table_writer} />
               <LineageLink tableData={data} />
               <SourceLink tableSource={data.source} />
-              <GeneratorLink tableGenerator={data.generator} />
             </div>
             <div className="header-section header-buttons">
               <TableReportsDropdown resourceReports={data.resource_reports} />

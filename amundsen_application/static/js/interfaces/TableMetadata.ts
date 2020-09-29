@@ -37,11 +37,6 @@ export interface TableSource {
   source_type: string;
 }
 
-export interface TableGenerator {
-  generator: string | null;
-  generator_type: string;
-}
-
 export interface TableWriter {
   application_url: string;
   description: string;
@@ -105,7 +100,6 @@ export interface TableMetadata {
   partition: PartitionData;
   table_readers: TableReader[];
   source: TableSource;
-  generator: TableGenerator;
   resource_reports: ResourceReport[];
   watermarks: Watermark[];
   programmatic_descriptions: TableProgrammaticDescriptions;
