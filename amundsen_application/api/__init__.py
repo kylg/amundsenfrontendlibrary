@@ -16,8 +16,6 @@ def init_routes(app: Flask) -> None:
 
 
 def index(path: str) -> Any:
-    if os.getenv('APP_WRAPPER') and not session.get("user"):
-        return redirect(url_for("login"))
     return render_template("index.html", env=ENVIRONMENT)  # pragma: no cover
 
 

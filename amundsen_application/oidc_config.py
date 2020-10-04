@@ -1,6 +1,6 @@
 # Copyright Contributors to the Amundsen project.
 # SPDX-License-Identifier: Apache-2.0
-
+import logging
 import json
 from http import HTTPStatus
 from typing import Dict, Optional
@@ -13,6 +13,7 @@ from amundsen_application.api.utils.request_utils import request_metadata
 from amundsen_application.api.v0 import current_user
 from flaskoidc_azure import get_token_from_cache, get_user
 
+LOGGER = logging.getLogger(__name__)
 
 def get_access_headers(app: Flask) -> Optional[Dict]:
     """
@@ -43,7 +44,7 @@ def get_auth_user(app: Flask) -> User:
     return user_info
 
 
-def put_auth_user(app: Flask) -> Response:
+def put_auth_user(app: Flask, user_info: Dict) -> Dict:
     """
     Add or update user into metadata service.
     :param user: user information
@@ -51,16 +52,17 @@ def put_auth_user(app: Flask) -> Response:
     :return: A class UserInfo (Note, there isn't a UserInfo class, so we use Any)
     """
     try:
-        user = get_auth_user(app)
-
+        user = load_user(user_info)
         url = '{0}{1}/{2}'.format(app.config['METADATASERVICE_BASE'], USER_ENDPOINT, user.user_id)
         response = request_metadata(url=url, method='PUT', data=user.__dict__)
         status_code = response.status_code
-
-        return make_response(jsonify({'msg': 'success', 'response': response.json()}), status_code)
+        if status_code == HTTPStatus.OK:
+            return response.json()
+        else:
+            return None
     except Exception as e:
-        message = 'Encountered exception: ' + str(e)
-        return make_response(jsonify({'msg': message}), HTTPStatus.INTERNAL_SERVER_ERROR)
+        LOGGER.error("Exception encountered while putting user", e)
+        return None
 
 
 def get_logged_in_user(app: Flask) -> User:

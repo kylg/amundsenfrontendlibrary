@@ -55,8 +55,11 @@ def get_table_preview() -> Response:
         else:
             message = 'Encountered error: Preview client request failed with code ' + str(status_code)
             logging.error(message)
-            # only necessary to pass the error text
-            payload = jsonify({'previewData': {'error_text': preview_data.get('error_text', '')}, 'msg': message})
+            # in some situation it will not return response body such as network error
+            if preview_data is None:
+                payload = jsonify({'previewData': {'error_text': str(status_code)}, 'msg': message})
+            else:
+                payload = jsonify({'previewData': {'error_text': preview_data.get('error_text', '')}, 'msg': message})
 
         return make_response(payload, status_code)
     except Exception as e:

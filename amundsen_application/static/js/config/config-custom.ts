@@ -13,8 +13,8 @@ const configCustom: AppConfigCustom = {
     sampleRate: 100,
   },
   mailClientFeatures: {
-    feedbackEnabled: false,
-    notificationsEnabled: false,
+    feedbackEnabled: true,
+    notificationsEnabled: true,
   },
   indexDashboards: {
     enabled: false,
@@ -22,7 +22,7 @@ const configCustom: AppConfigCustom = {
   indexUsers: {
     enabled: false,
   },
-  userIdLabel: 'email address',
+  userIdLabel: 'user name',
   issueTracking: {
     enabled: false,
   },
